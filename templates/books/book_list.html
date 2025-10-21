@@ -1,0 +1,76 @@
+<!-- templates/books/book_list.html -->
+{% extends 'base.html' %}
+
+{% block title %}Books - Bookstore{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <h4>Categories</h4>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a href="{% url 'books:book_list' %}" class="text-decoration-none">All Books</a>
+            </li>
+            {% for category in categories %}
+            <li class="list-group-item">
+                <a href="?category={{ category.slug }}" class="text-decoration-none">{{ category.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        
+        <div class="mt-4">
+            <h4>Search</h4>
+            <form method="get" action="{% url 'books:book_list' %}">
+                <input type="text" name="search" class="form-control" placeholder="Search books...">
+                <button type="submit" class="btn btn-primary mt-2 w-100">Search</button>
+            </form>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <h2 class="mb-4">Our Books</h2>
+        <div class="row">
+            {% for book in books %}
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    {% if book.cover_image %}
+                        <img src="{{ book.cover_image.url }}" class="card-img-top" alt="{{ book.title }}">
+                    {% else %}
+                        <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                            <i class="bi bi-book" style="font-size: 3rem;"></i>
+                        </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <p class="card-text text-muted">{{ book.author }}</p>
+                        <p class="card-text"><strong>${{ book.price }}</strong></p>
+                        <a href="{% url 'books:book_detail' book.pk %}" class="btn btn-primary btn-sm">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <p>No books found.</p>
+            {% endfor %}
+        </div>
+        
+        <!-- Pagination -->
+        {% if is_paginated %}
+        <nav>
+            <ul class="pagination">
+                {% if page_obj.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page=1">First</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+                {% endif %}
+                
+                <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+                
+                {% if page_obj.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Last</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title %}Checkout - Online Bookstore{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">
+    <i class="bi bi-credit-card"></i> Checkout
+</h2>
+
+<div class="row">
+    <!-- Shipping Information Form -->
+    <div class="col-md-7">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">
+                    <i class="bi bi-truck"></i> Shipping Information
+                </h5>
+            </div>
+            <div class="card-body">
+                <form method="post" id="checkoutForm">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="address" class="form-label">
+                            <i class="bi bi-geo-alt"></i> Street Address *
+                        </label>
+                        <textarea name="address" 
+                                  id="address" 
+                                  class="form-control" 
+                                  rows="3" 
+                                  placeholder="123 Main Street, Apt 4B"
+                                  required>{{ user.profile.address }}</textarea>
+                        <small class="form-text text-muted">
+                            Include apartment, suite, or unit number if applicable
+                        </small>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="city" class="form-label">
+                                <i class="bi bi-building"></i> City *
+                            </label>
+                            <input type="text" 
+                                   name="city" 
+                                   id="city" 
+                                   class="form-control" 
+                                   placeholder="New York"
+                                   value="{{ user.profile.city }}" 
+                                   required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="state" class="form-label">
+                                <i class="bi bi-map"></i> State/Province *
+                            </label>
+                            <input type="text" 
+                                   name="state" 
+                                   id="state" 
+                                   class="form-control" 
+                                   placeholder="NY"
+                                   value="{{ user.profile.state }}" 
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="zip" class="form-label">
+                                <i class="bi bi-mailbox"></i> ZIP/Postal Code *
+                            </label>
+                            <input type="text" 
+                                   name="zip" 
+                                   id="zip" 
+                                   class="form-control" 
+                                   placeholder="10001"
+                                   value="{{ user.profile.zip_code }}" 
+                                   required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="country" class="form-label">
+                                <i class="bi bi-globe"></i> Country *
+                            </label>
+                            <input type="text" 
+                                   name="country" 
+                                   id="country" 
+                                   class="form-control" 
+                                   placeholder="USA"
+                                   value="{{ user.profile.country }}" 
+                                   required>
+                        </div>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <i class="bi bi-check-circle"></i> Place Order
+                        </button>
+                        <a href="{% url 'cart:view_cart' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-arrow-left"></i> Back to Cart
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Order Summary -->
+    <div class="col-md-5">
+        <div class="card sticky-top" style="top: 20px;">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="bi bi-receipt"></i> Order Summary
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="list-group list-group-flush">
+                    {% for item in cart.items.all %}
+                    <div class="list-group-item px-0">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ item.book.title }}</h6>
+                                <small class="text-muted">by {{ item.book.author }}</small>
+                                <br>
+                                <small class="text-muted">Quantity: {{ item.quantity }}</small>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">${{ item.subtotal }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <hr>
+                
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Subtotal:</span>
+                    <strong>${{ cart.total_price }}</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Shipping:</span>
+                    <strong class="text-success">FREE</strong>
+                </div>
+                <div class="d-flex justify-content-between mb-2">
+                    <span>Tax:</span>
+                    <strong>$0.00</strong>
+                </div>
+                
+                <hr>
+                
+                <div class="d-flex justify-content-between">
+                    <h5>Total:</h5>
+                    <h5 class="text-success">${{ cart.total_price }}</h5>
+                </div>
+                
+                <div class="alert alert-info mt-3 mb-0" role="alert">
+                    <small>
+                        <i class="bi bi-info-circle"></i> 
+                        Your order will be processed after clicking "Place Order"
+                    </small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

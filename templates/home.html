@@ -1,0 +1,51 @@
+<!-- templates/home.html -->
+{% extends 'base.html' %}
+
+{% block title %}Home - Bookstore{% endblock %}
+
+{% block content %}
+<div class="jumbotron bg-light p-5 rounded-3 mb-4">
+    <h1 class="display-4">Welcome to Our Bookstore!</h1>
+    <p class="lead">Discover your next favorite book from our extensive collection.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'books:book_list' %}" role="button">Browse Books</a>
+</div>
+
+<h2 class="mb-4">Featured Books</h2>
+<div class="row">
+    {% for book in featured_books %}
+    <div class="col-md-3 mb-4">
+        <div class="card h-100">
+            {% if book.cover_image %}
+                <img src="{{ book.cover_image.url }}" class="card-img-top" alt="{{ book.title }}">
+            {% else %}
+                <div class="card-img-top bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <i class="bi bi-book" style="font-size: 3rem;"></i>
+                </div>
+            {% endif %}
+            <div class="card-body">
+                <h5 class="card-title">{{ book.title }}</h5>
+                <p class="card-text text-muted">{{ book.author }}</p>
+                <p class="card-text"><strong>${{ book.price }}</strong></p>
+                <a href="{% url 'books:book_detail' book.pk %}" class="btn btn-primary btn-sm">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<h2 class="mb-4 mt-5">Categories</h2>
+<div class="row">
+    {% for category in categories %}
+    <div class="col-md-4 mb-3">
+        <a href="{% url 'books:book_list' %}?category={{ category.slug }}" class="text-decoration-none">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{ category.name }}</h5>
+                    <p class="card-text">{{ category.description|truncatewords:15 }}</p>
+                </div>
+            </div>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

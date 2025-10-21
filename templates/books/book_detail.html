@@ -1,0 +1,92 @@
+<!-- templates/books/book_detail.html -->
+{% extends 'base.html' %}
+
+{% block title %}{{ book.title }} - Bookstore{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        {% if book.cover_image %}
+            <img src="{{ book.cover_image.url }}" class="img-fluid" alt="{{ book.title }}">
+        {% else %}
+            <div class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 400px;">
+                <i class="bi bi-book" style="font-size: 5rem;"></i>
+            </div>
+        {% endif %}
+    </div>
+    
+    <div class="col-md-8">
+        <h1>{{ book.title }}</h1>
+        <h4 class="text-muted">by {{ book.author }}</h4>
+        
+        <div class="my-3">
+            {% if average_rating %}
+                <span class="text-warning">
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= average_rating %}
+                            <i class="bi bi-star-fill"></i>
+                        {% else %}
+                            <i class="bi bi-star"></i>
+                        {% endif %}
+                    {% endfor %}
+                </span>
+                <span>({{ book.reviews.count }} reviews)</span>
+            {% endif %}
+        </div>
+        
+        <h3 class="text-success">${{ book.price }}</h3>
+        
+        <div class="my-3">
+            <strong>ISBN:</strong> {{ book.isbn }}<br>
+            <strong>Publisher:</strong> {{ book.publisher }}<br>
+            <strong>Publication Date:</strong> {{ book.publication_date }}<br>
+            <strong>Pages:</strong> {{ book.pages }}<br>
+            <strong>Language:</strong> {{ book.language }}<br>
+            <strong>Category:</strong> {{ book.category.name }}<br>
+            <strong>Stock:</strong> 
+            {% if book.in_stock %}
+                <span class="text-success">In Stock ({{ book.stock_quantity }})</span>
+            {% else %}
+                <span class="text-danger">Out of Stock</span>
+            {% endif %}
+        </div>
+        
+        <div class="my-4">
+            <h5>Description</h5>
+            <p>{{ book.description }}</p>
+        </div>
+        
+        {% if user.is_authenticated and book.in_stock %}
+            <a href="{% url 'cart:add_to_cart' book.id %}" class="btn btn-success btn-lg">
+                <i class="bi bi-cart-plus"></i> Add to Cart
+            </a>
+        {% elif not user.is_authenticated %}
+            <a href="{% url 'accounts:login' %}" class="btn btn-primary">Login to Purchase</a>
+        {% endif %}
+        
+        <div class="mt-5">
+            <h4>Customer Reviews</h4>
+            {% for review in reviews %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h6>{{ review.user.username }}</h6>
+                        <div class="text-warning">
+                            {% for i in "12345" %}
+                                {% if forloop.counter <= review.rating %}
+                                    <i class="bi bi-star-fill"></i>
+                                {% else %}
+                                    <i class="bi bi-star"></i>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <p class="mt-2">{{ review.comment }}</p>
+                        <small class="text-muted">{{ review.created_at|date:"F d, Y" }}</small>
+                    </div>
+                </div>
+            {% empty %}
+                <p>No reviews yet. Be the first to review!</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
