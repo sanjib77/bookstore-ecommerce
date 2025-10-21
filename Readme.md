@@ -3,7 +3,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11+-blue.svg)](https://www.python.org/)
 [![Django](https://img.shields.io/badge/Django-4.2-green.svg)](https://www.djangoproject.com/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-15-blue.svg)](https://www.postgresql.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](./LICENSE)
+[![License: SANJIB](https://img.shields.io/badge/License-SANJIB-yellow.svg)](./LICENSE)
 
 A full-featured online bookstore built with Django and PostgreSQL, prepared for AWS deployment. This repo contains a learning-focused, production-capable example with user and admin features.
 
@@ -145,7 +145,7 @@ python manage.py test
 ```
 
 ## License
-This project is licensed under the MIT License — see the LICENSE file for details.
+This project is open source project made for personal practice! 
 
 ## Author
 Sanjib Chakraborty — Initial work
