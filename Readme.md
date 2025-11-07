@@ -36,9 +36,9 @@ Admin
 ## Tech Stack
 Backend: Django 4.2, Python 3.11+  
 Database: PostgreSQL 15  
-Frontend: Django templates, Bootstrap 5.3, Vanilla JS  
-Deployment: Gunicorn, Nginx, WhiteNoise  
-Cloud: AWS (EC2, VPC, Security Groups, Route53 optional)
+Frontend: Django templates  
+Deployment (Planned) : Gunicorn, Nginx, WhiteNoise  
+Cloud (Planned): AWS (EC2, VPC, Security Groups, Route53 optional)
 
 ## Prerequisites
 Install:
